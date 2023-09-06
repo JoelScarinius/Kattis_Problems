@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "*.embeddedhtml": "html",
+      "ctype.h": "c",
+      "string.h": "c",
+      "stdlib.h": "c",
+      "sorting.h": "c",
+      "filehandling.h": "c",
+      "permatations.h": "c"
+    }
+  }
+}
