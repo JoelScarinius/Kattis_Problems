@@ -18,21 +18,9 @@ int main(int argc, char const *argv[])
         long long int stickLength = 0;
         scanf("%lld", stickLength); // Input length of sticks
         arr[i] = stickLength;
-        // arr[i] = 1;
     }
-    // arr[0] = 3;
-    // arr[1] = 1;
-    // arr[2] = 10;
-    // arr[3] = 5;
-    // arr[4] = 15;
 
     quickSort(arr, l, r);// Starts quickSort
-
-    // for (long long int i = 0; i < n; i++)
-    // {
-    //     printf("%lld ", arr[i]);
-    // }
-    
 
     for (long long int i = 0; i < n - 2 ; i++)
     {
