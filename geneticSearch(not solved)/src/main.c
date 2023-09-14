@@ -37,67 +37,91 @@
 // }
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-// Function to create the types dictionary
-void getTypesDict(char *s1, int *types) {
-    int len = strlen(s1);
-    types[0] = 1; // Initialize s1 to type 1
+int countMatches(char pattern[], char text[]) {
+    int patternLen = strlen(pattern);
+    int textLen = strlen(text);
+    int count = 0;
 
-    // Iterate over all substrings of s1
-    for (int i = 0; i < len; i++) {
-        for (int j = i + 1; j <= len; j++) {
-            types[atoi(s1 + i)] = 2; // Set substrings to type 2
+    for (int i = 0; i <= textLen - patternLen; i++) {
+        int j;
+        for (j = 0; j < patternLen; j++) {
+            if (text[i + j] != pattern[j]) {
+                break;
+            }
+        }
+        if (j == patternLen) {
+            count++;
         }
     }
 
-    // Iterate over all positions to insert A, C, G, and T
-    for (int i = 0; i <= len; i++) {
-        char newStr[32]; // Assuming a maximum length of 31 for input strings
-        for (char base = 'A'; base <= 'T'; base += 4) {
-            strcpy(newStr, s1);
-            memmove(newStr + i + 1, newStr + i, len - i + 1); // Shift characters to make space
-            newStr[i] = base; // Insert the base at the current position
-            types[atoi(newStr)] = 3; // Set the new string to type 3
-        }
-    }
+    return count;
 }
 
-// Function to get types count for s2
-void getTypesCount(char *s2, int *types, int *counter) {
-    int len = strlen(s2);
+int countRemovals(char pattern[], char text[]) {
+    int patternLen = strlen(pattern);
+    int textLen = strlen(text);
+    int count = 0;
 
-    // Iterate over all substrings of s2
-    for (int i = 0; i < len; i++) {
-        for (int j = i + 1; j <= len; j++) {
-            counter[types[atoi(s2 + i)]]++; // Increment the counter based on the type
+    for (int i = 0; i < patternLen; i++) {
+        char temp[patternLen];
+        int index = 0;
+        for (int j = 0; j < patternLen; j++) {
+            if (j != i) {
+                temp[index++] = pattern[j];
+            }
+        }
+        temp[index] = '\0';
+
+        count += countMatches(temp, text);
+    }
+
+    return count;
+}
+
+int countReplacements(char pattern[], char text[]) {
+    int patternLen = strlen(pattern);
+    int textLen = strlen(text);
+    int count = 0;
+
+    for (int i = 0; i < patternLen; i++) {
+        for (char replacement = 'A'; replacement <= 'T'; replacement++) {
+            if (replacement != pattern[i]) {
+                char temp[patternLen];
+                for (int j = 0; j < patternLen; j++) {
+                    if (j == i) {
+                        temp[j] = replacement;
+                    } else {
+                        temp[j] = pattern[j];
+                    }
+                }
+                temp[patternLen] = '\0';
+
+                count += countMatches(temp, text);
+            }
         }
     }
+
+    return count;
 }
 
 int main() {
+    char pattern[101], text[1001];
     while (1) {
-        char s1[32], s2[32];
-        scanf("%s", s1);
-        if (s1[0] == '0') {
+        scanf("%s", pattern);
+        if (strcmp(pattern, "0") == 0) {
             break;
         }
+        scanf("%s", text);
 
-        scanf("%s", s2);
+        int exactMatches = countMatches(pattern, text);
+        int removals = countRemovals(pattern, text);
+        int replacements = countReplacements(pattern, text);
 
-        int types[10000] = {0}; // Assuming a maximum length of 9999 for s1
-        int counter[4] = {0};
-
-        getTypesDict(s1, types);
-        getTypesCount(s2, types, counter);
-
-        // Print the results
-        for (int i = 1; i <= 3; i++) {
-            printf("%d ", counter[i]);
-        }
-        printf("\n");
+        printf("%d %d %d\n", exactMatches, removals, replacements);
     }
 
     return 0;
 }
+
