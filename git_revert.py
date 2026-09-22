@@ -23,3 +23,14 @@ print("revert" if counter % 2 != 0 else "unrevert")
 # import sys
 
 # print("revert" if len(re.findall(r'\bRevert\b', sys.stdin.readline())) % 2 != 0 else "unrevert")
+
+
+# another way to solve it
+# s = input()
+# reverts = 0
+
+# while s.startswith('Revert "'):
+#     reverts += 1
+#     s = s[8:-1]
+
+# print("revert" if reverts % 2 else "unrevert")
